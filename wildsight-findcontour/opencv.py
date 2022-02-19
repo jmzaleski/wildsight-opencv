@@ -45,6 +45,7 @@ if __name__ == '__main__':
         cv.waitKey(0)
         
     # from: https://www.geeksforgeeks.org/line-detection-python-opencv-houghline-method/
+    # TODO: try more preprocessing as described in https://stackoverflow.com/questions/6530518/prominent-lines-not-detected-by-hough-transform/6530651
     
     lines = cv.HoughLinesP(im_edges,1,np.pi/180,threshold=75,minLineLength=10,maxLineGap=5)
     for line in lines:
