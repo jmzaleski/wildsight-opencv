@@ -8,17 +8,12 @@ Created on Feb. 16, 2022
 import cv2 as cv
 import os
 import numpy as np
+SHOW = True
+DEBUG = True
+
 
 if __name__ == '__main__':
     
-    #===========================================================================
-    # tab = [["first","second"],["third", "fourth"]]
-    # for pair in tab:
-    #     left = pair[0]
-    #     right = pair[1]
-    #     print(left,right)
-    # exit(0)
-    #===========================================================================
     print("fool around with opencv opening a QGIS screensnap and looking for pink lines..")
     
     #FILE="smith.jpg"
@@ -31,7 +26,6 @@ if __name__ == '__main__':
 
     img = cv.imread(cv.samples.findFile(FILE))
 
-    SHOW = True
     if SHOW:
         cv.imshow(FILE ,im)
         cv.waitKey(0)
@@ -44,20 +38,24 @@ if __name__ == '__main__':
     
     # Detect edges using Canny
     threshold = 100 #from https://docs.opencv.org/3.4/da/d22/tutorial_py_canny.html
-    canny_output = cv.Canny(imgray, threshold, threshold * 2)        
+    im_edges = cv.Canny(imgray, threshold, threshold * 2)        
 
     if SHOW:
-        cv.imshow("canny output - edge detectin", canny_output)
+        cv.imshow("canny output - edge detectin", im_edges)
         cv.waitKey(0)
         
-    lines = cv.HoughLinesP(canny_output,1,np.pi/180,100,minLineLength=100,maxLineGap=10)
+    # from: https://www.geeksforgeeks.org/line-detection-python-opencv-houghline-method/
+    
+    lines = cv.HoughLinesP(im_edges,1,np.pi/180,100,minLineLength=100,maxLineGap=10)
     for line in lines:
         x1,y1,x2,y2 = line[0]
         if abs(x1 - x2) < 100 or abs(y1 - y2) < 100 :
-            print("skip (", x1,",",y1,") -> (",  x2,",",y2,")" )
+            if DEBUG: 
+                print("draw (", x1,",",y1,") -> (",  x2,",",y2,") because horizontal or vertical" )
             cv.line(im,(x1,y1),(x2,y2),(255,0,0),2)  
         else:
-            print("draw (", x1,",",y1,") -> (",  x2,",",y2,")" )
+            if DEBUG:
+                print("skip (", x1,",",y1,") -> (",  x2,",",y2,") because not horizontal or vertical" )
             #cv.line(im,(x1,y1),(x2,y2),(0,255,0),2) #green for diagonals
                 
     cv.imshow(FILE+'-linesP', im)
