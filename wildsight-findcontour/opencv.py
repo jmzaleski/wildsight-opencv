@@ -8,7 +8,7 @@ Created on Feb. 16, 2022
 import cv2 as cv
 import os
 import numpy as np
-SHOW = True
+SHOW = False
 DEBUG = True
 
 
@@ -46,17 +46,17 @@ if __name__ == '__main__':
         
     # from: https://www.geeksforgeeks.org/line-detection-python-opencv-houghline-method/
     
-    lines = cv.HoughLinesP(im_edges,1,np.pi/180,100,minLineLength=100,maxLineGap=10)
+    lines = cv.HoughLinesP(im_edges,1,np.pi/180,threshold=75,minLineLength=10,maxLineGap=5)
     for line in lines:
         x1,y1,x2,y2 = line[0]
-        if abs(x1 - x2) < 100 or abs(y1 - y2) < 100 :
+        if abs(x1 - x2) < 0.5 or abs(y1 - y2) < 0.5 :
             if DEBUG: 
                 print("draw (", x1,",",y1,") -> (",  x2,",",y2,") because horizontal or vertical" )
             cv.line(im,(x1,y1),(x2,y2),(255,0,0),2)  
         else:
             if DEBUG:
                 print("skip (", x1,",",y1,") -> (",  x2,",",y2,") because not horizontal or vertical" )
-            #cv.line(im,(x1,y1),(x2,y2),(0,255,0),2) #green for diagonals
+            #cv.line(im,(x1,y1),(x2,y2),(0,255,0),2) #green for diagonals.. eyeball to make sure no green horizontals
                 
     cv.imshow(FILE+'-linesP', im)
     cv.waitKey(0)    
