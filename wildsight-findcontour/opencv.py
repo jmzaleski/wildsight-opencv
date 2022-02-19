@@ -8,8 +8,6 @@ Created on Feb. 16, 2022
 import cv2 as cv
 import os
 import numpy as np
-import random as rng
-from pickle import FALSE
 
 if __name__ == '__main__':
     
