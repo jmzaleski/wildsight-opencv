@@ -32,16 +32,16 @@ if __name__ == '__main__':
         exit(2)
 
     img = cv.imread(cv.samples.findFile(FILE))
-    #gray = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
-    #edges = cv.Canny(gray,50,150,apertureSize = 3)
 
-
-    SHOW = False
-    imgray = cv.cvtColor(im, cv.COLOR_BGR2GRAY)
-    
-    
+    SHOW = True
     if SHOW:
-        cv.imshow("gray",imgray)
+        cv.imshow(FILE ,im)
+        cv.waitKey(0)
+
+    imgray = cv.cvtColor(im, cv.COLOR_BGR2GRAY)
+        
+    if SHOW:
+        cv.imshow(FILE + "-gray",imgray)
         cv.waitKey(0)
     
     # Detect edges using Canny
@@ -62,7 +62,7 @@ if __name__ == '__main__':
             print("draw (", x1,",",y1,") -> (",  x2,",",y2,")" )
             #cv.line(im,(x1,y1),(x2,y2),(0,255,0),2) #green for diagonals
                 
-    cv.imshow('linesP', im)
+    cv.imshow(FILE+'-linesP', im)
     cv.waitKey(0)    
     exit(0)
     
